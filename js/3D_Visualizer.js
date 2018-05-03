@@ -13,26 +13,23 @@ var m = math.matrix([[0,0],[50,50],[100,50],[100,100],[50,100],[50,50]]);
 
 draw2DPath(m, ctx, true);
 
+function getX(vector) {
+    return vector
+}
+
 /* Draws a path based on the given 2D matrix. If transpose parameter is true, the matrix is transposed before processing.*/
 function draw2DPath(matrix, ctx, transpose = false) {
     //"use strict";
     
+    /* If specified, transpose the matrix*/
     if (transpose) {
         matrix = math.transpose(matrix);
     }
     
-    /* Reference methods */
-    console.log(matrix.size()[1]);
-    console.log(matrix.get([0,1]));
-    matrix.forEach(function (value,index,matrix) {
-        console.log(value,' ',index);
-    })
-    
-    /* Drawing Algorithm */
-    ctx.beginPath();
-    ctx.moveTo(matrix.get([0,0]),matrix.get([1,0]))
-    var col_index = 1;
-    var col_size = matrix.size()[1];
+    ctx.beginPath(); // Start to draw
+    ctx.moveTo(matrix.get([0,0]),matrix.get([1,0])) // Move to initial pos
+    var col_index = 1; // Set index to SECOND vector
+    var col_size = matrix.size()[1]; // Get num of cols
     
     while (col_index < col_size) {
         ctx.lineTo(matrix.get([0,col_index]),matrix.get([1,col_index]))
@@ -40,8 +37,6 @@ function draw2DPath(matrix, ctx, transpose = false) {
     }
     
     ctx.stroke();
-    
-    
 }
 
 /* Returns a matrix representation of a cube in the specified coordinates and side length*/
