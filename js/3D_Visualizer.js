@@ -36,7 +36,9 @@ function draw2dPath(matrix, ctx, transpose = false) {
 multiplication of the transpose of the perspective 
 object P and the matrix object M: t(P)M */
 function project3d(matrix,perspective) {
-    return perspective.generateMatrix()
+    /* It may be necessary to perform a shift to 
+    origin then a shift back to position */
+    return math.multiply(perspective.generateMatrix(),matrix);
 }
 
 

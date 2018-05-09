@@ -40,12 +40,60 @@ class Perspective extends Shape3d {
     set rot(rot) { this._rot = rot; }
     set tilt(tilt) { this._tilt = tilt; }
     
+    /* Returns a 1d array representation of the
+    x unit vector centered around the origin. */
+    x_unit() {
+        var rot_rad = degToRad(this.rot);
+        return [math.cos(rot_rad),-math.sin(rot_rad),0];
+    }
+    
+    /* Returns a 1d array representation of the
+    y unit vector centered around the origin. */
+    y_unit() {
+        var rot_rad = degToRad(this.rot);
+        var tilt_rad = degToRad(this.tilt);
+        return [
+            math.sin(tilt_rad)*(-math.sin(rot_rad)),
+            math.sin(tilt_rad)*(-math.cos(rot_rad)),
+            math.cos(tilt_rad)
+        ];
+    }
+    
     /* Returns the transposed matrix of the
     associated vectors of the Perspective object.
     This is a 2x3 matrix that should be on the RHS
     of the matrix multiplication with the 3d
-    projected matrix. */
+    projected matrix. This matrix has the unit vectors based
+    around the origin and is calculated using the rotation
+    and tilt attributes of the perspective object */
     generateMatrix() {
+        return math.matrix([
+            this.x_unit(),
+            this.y_unit()
+        ])
+    }
+    
+    /* Returns the x displacement that should be applied
+    to the 2d projection */
+    x_disp() {
+        return math.multiply(
+            math.matrix([this.x_unit()]),
+            math.matrix([[this.x],[this.y],[this.z]])
+        ).get([0,0]);
+    }
+    
+    /* Returns the y displacement that should be applied
+    to the 2d projection */
+    y_disp() {
+        return math.multiply(
+            math.matrix([this.y_unit()]),
+            math.matrix([[this.x],[this.y],[this.z]])
+        ).get([0,0]);
+    }
+    
+    /* Returns the zoom factor that is based on the 
+    position of the Perspective origin */
+    zoom_fac() {
         
     }
 }
@@ -92,13 +140,15 @@ class Cube extends Shape3d {
 }
 
 /******************* TEST CODE ****************/
-var p = new Perspective(0,0,0,0,0)
-p.rot = 78
+var p = new Perspective(1,1,1,0,0)
+p.rot = 0
+p.tilt = 0
 console.log(p.rot)
 console.log(math.PI)
 console.log(math.PI/360)
 cube = new Cube(0,0,0,10)
 console.log(math.transpose(cube.generateMatrix()).format())
-
-console.log((math.matrix([[1,2,3]])*math.matrix([[1],[2],[3]]))[0,1])
+console.log(math.multiply(math.matrix([[1,2,3]]),math.matrix([[1],[2],[3]])).format())
+console.log(p.generateMatrix().format())
+console.log(p.x_disp())
 /*************** END OF TEST CODE ***************/
