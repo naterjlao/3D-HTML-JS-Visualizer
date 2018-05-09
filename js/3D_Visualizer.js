@@ -1,24 +1,25 @@
 /*global document:true*/
 /*global math:true*/
 
-var hypt = 100;
-var side = math.sqrt(math.pow(hypt, 2) / 2);
-
+/* Setup the canvas in the document */
 var canvas = document.getElementById("canvas");
 var ctx = canvas.getContext("2d");
 
-ctx.strokeRect(0, 0, side, side);
+/***************** METHOD DEFINITIONS ***************/
 
-var m = math.matrix([[0,0],[50,50],[100,50],[100,100],[50,100],[50,50]]);
+/* Returns the x and y coordinates of a specified
+column vector of 3d matrix */
+function getX(matrix,col_index) { return matrix.get([0,col_index]) }
+function getY(matrix,col_index) { return matrix.get([1,col_index]) }
 
-draw2DPath(m, ctx, true);
-
-function getX(vector) {
-    return vector
+/* Converts a degree angle to radian for use
+in trigonometric functions. */
+function degToRad(degree) {
+    return math.PI * 2 * degree / 360;
 }
 
 /* Draws a path based on the given 2D matrix. If transpose parameter is true, the matrix is transposed before processing.*/
-function draw2DPath(matrix, ctx, transpose = false) {
+function draw2dPath(matrix, ctx, transpose = false) {
     //"use strict";
     
     /* If specified, transpose the matrix*/
@@ -26,32 +27,35 @@ function draw2DPath(matrix, ctx, transpose = false) {
         matrix = math.transpose(matrix);
     }
     
+    /* Draw the matrix path */
     ctx.beginPath(); // Start to draw
-    ctx.moveTo(matrix.get([0,0]),matrix.get([1,0])) // Move to initial pos
+    ctx.moveTo(getX(matrix,0),getY(matrix,1)) // Move to initial pos
     var col_index = 1; // Set index to SECOND vector
     var col_size = matrix.size()[1]; // Get num of cols
     
+    /* Draw the described path */
     while (col_index < col_size) {
-        ctx.lineTo(matrix.get([0,col_index]),matrix.get([1,col_index]))
+        ctx.lineTo(getX(matrix,col_index),getY(matrix,col_index))
         col_index = col_index + 1;
     }
     
+    /* Final draw */
     ctx.stroke();
 }
 
-/* Returns a matrix representation of a cube in the specified coordinates and side length*/
-function cube(origin_x, origin_y, origin_z, side_length) {
-    "use strict";
+/* Projects the 3d matrix to the 2d plane using a perspective object */
+function project3d(matrix,perspective) {
     
-    return 0;
 }
 
-/* Generates a matrix representation of the projection of the given 3D matrix unto 2D space */
-function project3D(matrix) {
-    "use strict";
-}
 
-/* Draws the 3D object unto the canvas*/
-function draw3D(matrix, ctx) {
-    "use strict";
-}
+/*************** TEST CODE ************/
+var hypt = 100;
+var side = math.sqrt(math.pow(hypt, 2) / 2);
+ctx.strokeRect(0, 0, side, side);
+var m = math.matrix([[0,0],[50,50],[100,50],[100,100],[50,100],[50,50]]);
+draw2dPath(m, ctx, true);
+var p = new Perspective(0,0,0,0,0)
+console.log(degToRad(720))
+console.log(math.sin(degToRad(90)))
+/************** END OF TEST CODE **************/
