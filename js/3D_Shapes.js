@@ -15,6 +15,12 @@ class Shape3d {
     set x(x) { this._x = x; }
     set y(y) { this._y = y; }
     set z(z) { this._z = z; }
+    
+    /* Returns a 3D vector of the origin */
+    generateMatrix() {
+        return math.transpose(
+            math.matrix([this._x,this._y,this._z]))
+    }
 }
 
 /* Defines a perspective object of the 3d space.
@@ -33,6 +39,15 @@ class Perspective extends Shape3d {
     get tilt() { return this._tilt; }
     set rot(rot) { this._rot = rot; }
     set tilt(tilt) { this._tilt = tilt; }
+    
+    /* Returns the transposed matrix of the
+    associated vectors of the Perspective object.
+    This is a 2x3 matrix that should be on the RHS
+    of the matrix multiplication with the 3d
+    projected matrix. */
+    generateMatrix() {
+        
+    }
 }
 
 class Cube extends Shape3d {
@@ -84,4 +99,6 @@ console.log(math.PI)
 console.log(math.PI/360)
 cube = new Cube(0,0,0,10)
 console.log(math.transpose(cube.generateMatrix()).format())
+
+console.log((math.matrix([[1,2,3]])*math.matrix([[1],[2],[3]]))[0,1])
 /*************** END OF TEST CODE ***************/

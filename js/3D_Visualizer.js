@@ -7,17 +7,6 @@ var ctx = canvas.getContext("2d");
 
 /***************** METHOD DEFINITIONS ***************/
 
-/* Returns the x and y coordinates of a specified
-column vector of 3d matrix */
-function getX(matrix,col_index) { return matrix.get([0,col_index]) }
-function getY(matrix,col_index) { return matrix.get([1,col_index]) }
-
-/* Converts a degree angle to radian for use
-in trigonometric functions. */
-function degToRad(degree) {
-    return math.PI * 2 * degree / 360;
-}
-
 /* Draws a path based on the given 2D matrix. If transpose parameter is true, the matrix is transposed before processing.*/
 function draw2dPath(matrix, ctx, transpose = false) {
     //"use strict";
@@ -43,9 +32,11 @@ function draw2dPath(matrix, ctx, transpose = false) {
     ctx.stroke();
 }
 
-/* Projects the 3d matrix to the 2d plane using a perspective object */
+/* Projects the 3d matrix to the 2d plane using a perspective object. This is done using a matrix
+multiplication of the transpose of the perspective 
+object P and the matrix object M: t(P)M */
 function project3d(matrix,perspective) {
-    
+    return perspective.generateMatrix()
 }
 
 
