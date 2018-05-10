@@ -98,6 +98,14 @@ class Perspective extends Shape3d {
     }
 }
 
+class Line3d extends Shape3d {
+    /* Default constructor, direction is an 1d array vector of 
+    the direction of the line: [x,y,z] */
+    constructor(x,y,z,direction) {
+        
+    }
+}
+
 class Cube extends Shape3d {
     constructor(x,y,z,size) {
         super(x,y,z);
@@ -115,17 +123,17 @@ class Cube extends Shape3d {
         var x = this.x
         var y = this.y
         var z = this.z
-        var s = this.size / 2;
-        var corner1 = [x+s,y+s,z+s];
-        var corner2 = [x-s,y+s,z+s];
-        var corner3 = [x-s,y-s,z+s];
-        var corner4 = [x+s,y-s,z+s];
-        var corner5 = [x+s,y+s,z-s];
-        var corner6 = [x-s,y+s,z-s];
-        var corner7 = [x-s,y-s,z-s];
-        var corner8 = [x+s,y-s,z-s];
+        var corner1 = [ 1, 1, 1];
+        var corner2 = [-1, 1, 1];
+        var corner3 = [-1,-1, 1];
+        var corner4 = [ 1,-1, 1];
+        var corner5 = [ 1, 1,-1];
+        var corner6 = [-1, 1,-1];
+        var corner7 = [-1,-1,-1];
+        var corner8 = [ 1,-1,-1];
         
-        return math.transpose(
+        /* construct the unit cube */
+        var matrix = math.transpose(
             math.matrix(
                 [
                     corner1, corner2, corner3, corner4,
@@ -136,5 +144,13 @@ class Cube extends Shape3d {
                     corner2, corner6, corner5, corner1
                 ]
             ));
+        
+        /* Perform the necessary transformations */
+        var s = this.size / 2;
+        var scaleTransform = math.matrix([[s,0,0],[0,s,0],[0,0,s]]);
+        matrix = math.multiply(scaleTransform,matrix);
+        
+        /* Resulting matrix */
+        return matrix;
     }
 }
