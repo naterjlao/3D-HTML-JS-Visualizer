@@ -44,7 +44,7 @@ class Perspective extends Shape3d {
     x unit vector centered around the origin. */
     x_unit() {
         var rot_rad = degToRad(this.rot);
-        return [math.cos(rot_rad),-math.sin(rot_rad),0];
+        return [math.cos(rot_rad),math.sin(rot_rad),0];
     }
     
     /* Returns a 1d array representation of the
@@ -54,7 +54,7 @@ class Perspective extends Shape3d {
         var tilt_rad = degToRad(this.tilt);
         return [
             math.sin(tilt_rad)*(-math.sin(rot_rad)),
-            math.sin(tilt_rad)*(-math.cos(rot_rad)),
+            math.sin(tilt_rad)*(math.cos(rot_rad)),
             math.cos(tilt_rad)
         ];
     }
@@ -138,17 +138,3 @@ class Cube extends Shape3d {
             ));
     }
 }
-
-/******************* TEST CODE ****************/
-var p = new Perspective(1,1,1,0,0)
-p.rot = 0
-p.tilt = 0
-console.log(p.rot)
-console.log(math.PI)
-console.log(math.PI/360)
-cube = new Cube(0,0,0,10)
-console.log(math.transpose(cube.generateMatrix()).format())
-console.log(math.multiply(math.matrix([[1,2,3]]),math.matrix([[1],[2],[3]])).format())
-console.log(p.generateMatrix().format())
-console.log(p.x_disp())
-/*************** END OF TEST CODE ***************/
