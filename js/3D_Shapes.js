@@ -21,6 +21,34 @@ class Shape3d {
         return math.transpose(
             math.matrix([this._x,this._y,this._z]))
     }
+    
+    /* Performs a scaling transformation of a given 3d matrix 
+    by some factor */
+    scale(matrix,factor) {
+        return math.multiply(math.multiply(factor,math.eye(3,3)),matrix)
+    }
+    
+    /* Performs a rotation transformation around an object origin based
+    on either an [x,y,z] axis rotation angle */
+    rotate(matrix,x_rot,y_rot,z_rot) {
+        var transformation = math.transpose(math.matrix([
+            
+        ]))
+    }
+    
+    /* Performs a translation transformation of the a given 3d matrix
+    by some value of x, y, z movement */
+    translate(matrix,x = this.x, y = this.y, z = this.z) {
+        var i = 0
+        while (i < matrix.size()[1]) {
+            matrix.subset(math.index(0,i), matrix.get([0,i]) + x);
+            matrix.subset(math.index(1,i), matrix.get([1,i]) + y);
+            matrix.subset(math.index(2,i), matrix.get([2,i]) + z);
+            i = i + 1;
+        }
+        
+        return matrix;
+    }
 }
 
 /* Defines a perspective object of the 3d space.
@@ -120,9 +148,6 @@ class Cube extends Shape3d {
     the cube in a vector path. This path can either be constructed
     using 3D path, or by using the 3d rectangular draw. */
     generateMatrix() {
-        var x = this.x
-        var y = this.y
-        var z = this.z
         var corner1 = [ 1, 1, 1];
         var corner2 = [-1, 1, 1];
         var corner3 = [-1,-1, 1];
@@ -146,9 +171,9 @@ class Cube extends Shape3d {
             ));
         
         /* Perform the necessary transformations */
-        var s = this.size / 2;
-        var scaleTransform = math.matrix([[s,0,0],[0,s,0],[0,0,s]]);
-        matrix = math.multiply(scaleTransform,matrix);
+        matrix = super.scale(matrix,this.size/2) /* Scaling */
+        /* Rotations */
+        matrix = super.translate(matrix); /* Translation */
         
         /* Resulting matrix */
         return matrix;
